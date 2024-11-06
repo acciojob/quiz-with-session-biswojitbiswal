@@ -76,7 +76,8 @@ function renderQuestions() {
 
       // Explicitly set the checked property if this option was previously selected
       if (userAnswers[i] === choice) {
-        choiceInput.checked = true;
+        choiceInput.setAttribute("checked", "true");
+        choiceInput.checked = true; // Ensure it's also set as a property
       }
 
       // Event listener to save progress on selection
@@ -94,7 +95,7 @@ function renderQuestions() {
   });
 }
 
-// Event listener for the submit button
+
 submitButton.addEventListener("click", calculateScore);
 
 // Display stored score if available in local storage
