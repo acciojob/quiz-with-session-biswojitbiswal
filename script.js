@@ -58,36 +58,39 @@ function calculateScore() {
 
 // Render questions with the ability to load saved progress
 function renderQuestions() {
-  questionsElement.innerHTML = ""; // Clear previous content
+  questionsElement.innerHTML = ""; // Clear any previous content
 
   questions.forEach((question, i) => {
-    const questionElement = document.createElement("div");
-    const questionText = document.createTextNode(question.question);
-    questionElement.appendChild(questionText);
-    
+    const questionContainer = document.createElement("div");
+    const questionText = document.createElement("p");
+    questionText.textContent = question.question;
+    questionContainer.appendChild(questionText);
+
     question.choices.forEach((choice) => {
-      const choiceElement = document.createElement("input");
-      choiceElement.type = "radio";
-      choiceElement.name = `question-${i}`;
-      choiceElement.value = choice;
-      
-      // Check if user answer is already saved
+      const choiceLabel = document.createElement("label");
+      const choiceInput = document.createElement("input");
+
+      choiceInput.type = "radio";
+      choiceInput.name = `question-${i}`;
+      choiceInput.value = choice;
+
+      // Explicitly set the checked property if this option was previously selected
       if (userAnswers[i] === choice) {
-        choiceElement.checked = true;
+        choiceInput.checked = true;
       }
-      
+
       // Event listener to save progress on selection
-      choiceElement.addEventListener("change", () => {
-        userAnswers[i] = choice;
-        saveProgress();
+      choiceInput.addEventListener("change", () => {
+        userAnswers[i] = choice; // Save answer in userAnswers object
+        saveProgress(); // Update session storage with new progress
       });
-      
-      const choiceText = document.createTextNode(choice);
-      questionElement.appendChild(choiceElement);
-      questionElement.appendChild(choiceText);
+
+      choiceLabel.appendChild(choiceInput);
+      choiceLabel.appendChild(document.createTextNode(choice));
+      questionContainer.appendChild(choiceLabel);
     });
-    
-    questionsElement.appendChild(questionElement);
+
+    questionsElement.appendChild(questionContainer);
   });
 }
 
